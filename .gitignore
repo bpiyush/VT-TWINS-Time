@@ -1,0 +1,3 @@
+checkpoint/
+data/dict.npy
+data/word2vec.pth
