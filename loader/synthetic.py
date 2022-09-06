@@ -42,6 +42,12 @@ class Synthetic(Dataset):
         sentences = [m[text_key] for m in metadata]
         video_ids = sorted([os.path.basename(f).split(".pt")[0] for f in metadata_files])
         self.data = pd.DataFrame({"video_id": video_ids, "sentence": sentences})
+        
+        # print an example
+        print()
+        print("Video ID: ", self.data['video_id'].values[0])
+        print("Sentence: ", self.data['sentence'].values[0])
+        print()
 
         self.video_root = video_root
 
