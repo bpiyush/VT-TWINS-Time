@@ -65,6 +65,17 @@ def get_loader(args, text_key="caption"):
 def main(args):
     model = deploy_model(args)
     
+    # small sanity check to show that the model is insensitive to word order
+    text_emb1 = model.text_module(["This is a test"], raw_text=True)
+    text_emb2 = model.text_module(["is a This test"], raw_text=True)
+    assert torch.allclose(text_emb1, text_emb2, atol=1e-5)
+    from termcolor import colored
+    from time import sleep
+    print()
+    print(colored("***** WARNING: This model is insensitive to word order *****", "red"))
+    print()
+    sleep(30)
+
     # caption similarity
     caption_test_loader = get_loader(args, text_key="caption")
     caption_all_video_embd, caption_all_text_embd = test(caption_test_loader, model, args)
@@ -84,8 +95,6 @@ def main(args):
         distractor_v2t_sim = np.dot(distractor_all_video_embd, distractor_all_text_embd.T)
         # take the diagonal
         distractor_v2t_sim = np.diag(distractor_v2t_sim)
-        
-        import ipdb; ipdb.set_trace()
 
         print(caption_v2t_sim)
         print(distractor_v2t_sim)

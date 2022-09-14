@@ -191,7 +191,8 @@ class Sentence_Embedding(nn.Module):
 
     def words_to_ids(self, x):
         split_x = [self._words_to_token(self._split_text(sent)) for sent in x]
-        return th.stack(split_x, dim=0)
+        device = self.fc1.state_dict()["weight"].device
+        return th.stack(split_x, dim=0).to(device)
 
     def forward(self, x, raw_text=False):
         if raw_text:
